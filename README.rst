@@ -1,2 +1,2 @@
-# python-rest-client
+# Replify
 Python REST client to interact with Replyify API
