@@ -327,7 +327,7 @@ class UpdateableAPIResource(APIResource):
     def _modify(cls, url, access_token=None,  idempotency_key=None, **params):
         requestor = api.ReplyifApi(access_token)
         headers = populate_headers(idempotency_key)
-        response, access_token = requestor.request('post', url, params, headers)
+        response, access_token = requestor.request('patch', url, params, headers)
         return convert_to_replyify_object(response, access_token)
 
     @classmethod
