@@ -54,6 +54,10 @@ class InvalidRequestException(ReplyifyException):
         self.param = param
 
 
+class PermissionException(ReplyifyException):
+    pass
+
+
 class AuthenticationException(ReplyifyException):
     pass
 

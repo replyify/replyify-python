@@ -16,15 +16,17 @@ Or:
     $ easy_install replyify
     
 
-Setting up a Replyify Account
------------------------------
+Register Your Application with Replyify
+----------------------------------------
 
-Sign up for Replyify at https://app.replyify.com/access/signup
+1) Sign up for Replyify at https://app.replyify.com/access/signup
+2) Register your application at https://app.replyify.com/oauth2/applications/register
 
 Using the Replyify API
 ----------------------
 
 Documentation for the python bindings can be found here:
+
 - https://app.replyify.com/api/docs
 - http://replyify.com/api/docs/python
 

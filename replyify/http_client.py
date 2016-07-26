@@ -1,10 +1,14 @@
+# Copyright (c) 2010-2011 Stripe (http://stripe.com)
+# The following code is a derivative work of the code from the Stripe project,
+# which is licensed The MIT License
+
 import os
 import sys
 import textwrap
 import warnings
 import email
 
-from replyify import error, util
+from replyify import exceptions, utils
 
 
 # - Requests is the preferred HTTP library
@@ -137,7 +141,7 @@ class RequestsClient(HTTPClient):
             else:
                 err += " with no error message"
         msg = textwrap.fill(msg) + "\n\n(Network error: %s)" % (err,)
-        raise error.APIConnectionError(msg)
+        raise exceptions.APIConnectionException(msg)
 
 
 class UrlFetchClient(HTTPClient):
@@ -184,7 +188,7 @@ class UrlFetchClient(HTTPClient):
                    "problem persists, let us know at support@replyify.com.")
 
         msg = textwrap.fill(msg) + "\n\n(Network error: " + str(e) + ")"
-        raise error.APIConnectionError(msg)
+        raise exceptions.APIConnectionError(msg)
 
 
 class PycurlClient(HTTPClient):
@@ -198,8 +202,8 @@ class PycurlClient(HTTPClient):
         return dict((k.lower(), v) for k, v in dict(headers).iteritems())
 
     def request(self, method, url, headers, post_data=None):
-        s = util.StringIO.StringIO()
-        rheaders = util.StringIO.StringIO()
+        s = utils.StringIO.StringIO()
+        rheaders = utils.StringIO.StringIO()
         curl = pycurl.Curl()
 
         if method == 'get':
@@ -211,7 +215,7 @@ class PycurlClient(HTTPClient):
             curl.setopt(pycurl.CUSTOMREQUEST, method.upper())
 
         # pycurl doesn't like unicode URLs
-        curl.setopt(pycurl.URL, util.utf8(url))
+        curl.setopt(pycurl.URL, utils.utf8(url))
 
         curl.setopt(pycurl.WRITEFUNCTION, s.write)
         curl.setopt(pycurl.HEADERFUNCTION, rheaders.write)
@@ -255,7 +259,7 @@ class PycurlClient(HTTPClient):
                    "problem persists, let us know at support@replyify.com.")
 
         msg = textwrap.fill(msg) + "\n\n(Network error: " + e[1] + ")"
-        raise error.APIConnectionError(msg)
+        raise exceptions.APIConnectionError(msg)
 
 
 class Urllib2Client(HTTPClient):
@@ -291,4 +295,4 @@ class Urllib2Client(HTTPClient):
         msg = ("Unexpected error communicating with Replyify. "
                "If this problem persists, let us know at support@replyify.com.")
         msg = textwrap.fill(msg) + "\n\n(Network error: " + str(e) + ")"
-        raise error.APIConnectionError(msg)
+        raise exceptions.APIConnectionError(msg)
