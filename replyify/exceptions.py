@@ -46,12 +46,12 @@ class APIConnectionException(ReplyifyException):
 
 class InvalidRequestException(ReplyifyException):
 
-    def __init__(self, message, param, http_body=None,
+    def __init__(self, message, error_list, http_body=None,
                  http_status=None, json_body=None, headers=None):
         super(InvalidRequestException, self).__init__(
             message, http_body, http_status, json_body,
             headers)
-        self.param = param
+        self.error_list = error_list
 
 
 class PermissionException(ReplyifyException):

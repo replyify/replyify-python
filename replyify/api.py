@@ -78,7 +78,11 @@ class ReplyifApi(object):
 
     def handle_api_error(self, rbody, rcode, resp, rheaders):
         try:
-            err = resp['error']
+            errors = resp.get('errors')
+            if not errors:
+                err = resp['error']
+            else:
+                err = 'Error in supplied form data'
         except (KeyError, TypeError):
             raise exceptions.APIException(
                 'Invalid response object from API: %r (HTTP response code '
@@ -86,16 +90,16 @@ class ReplyifApi(object):
                 rbody, rcode, resp)
 
         # Rate limits were previously coded as 400's with code 'rate_limit'
-        if rcode == 429 or (rcode == 400 and err.get('code') == 'rate_limit'):
-            raise exceptions.RateLimitException(err.get('message'), rbody, rcode, resp, rheaders)
+        if rcode == 429:
+            raise exceptions.RateLimitException(err, rbody, rcode, resp, rheaders)
         elif rcode in [400, 404]:
-            raise exceptions.InvalidRequestException(err.get('message'), err.get('param'), rbody, rcode, resp, rheaders)
+            raise exceptions.InvalidRequestException(err, errors, rbody, rcode, resp, rheaders)
         elif rcode == 403:
-            raise exceptions.PermissionException(err.get('message'), rbody, rcode, resp, rheaders)
+            raise exceptions.PermissionException(err, rbody, rcode, resp, rheaders)
         elif rcode == 401:
-            raise exceptions.AuthenticationException(err.get('message'), rbody, rcode, resp, rheaders)
+            raise exceptions.AuthenticationException(err, rbody, rcode, resp, rheaders)
         else:
-            raise exceptions.APIException(err.get('message'), rbody, rcode, resp, rheaders)
+            raise exceptions.APIException(err, rbody, rcode, resp, rheaders)
 
     def request_raw(self, method, url, params=None, supplied_headers=None):
         '''
