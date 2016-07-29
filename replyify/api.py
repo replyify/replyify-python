@@ -120,10 +120,6 @@ class ReplyifApi(object):
 
         method = method.lower()
         abs_url = '%s%s' % (self.api_base, url)
-        encoded_param_dict = dict(_api_encode(params or {}))
-        print params
-        print encoded_param_dict
-        # params = list()
         encoded_params = urllib.urlencode(list(_api_encode(params or {})))
 
         if method == 'get' or method == 'delete':
@@ -196,7 +192,7 @@ class ReplyifApi(object):
         except Exception:
             raise exceptions.APIException(
                 'Invalid response body from API: %s '
-                '(HTTP response code was %d)' % (rbody, rcode),
+                '(HTTP response code was %d)' % (rbody[:500], rcode),
                 rbody, rcode, rheaders)
         if not (200 <= rcode < 300):
             self.handle_api_error(rbody, rcode, resp, rheaders)
