@@ -238,6 +238,15 @@ class APIResource(ReplyifyObject):
         extn = urllib.quote_plus(guid)
         return '%s/%s' % (base, extn)
 
+    @classmethod
+    def _build_instance_url(cls, guid):
+        base = cls.class_url()
+        if not guid:
+            return base
+        guid = utils.utf8(guid)
+        extn = urllib.quote_plus(guid)
+        return '%s/%s' % (base, extn)
+
 
 class ListObject(ReplyifyObject):
 

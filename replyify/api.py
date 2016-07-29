@@ -120,14 +120,17 @@ class ReplyifApi(object):
 
         method = method.lower()
         abs_url = '%s%s' % (self.api_base, url)
-        params = list(_api_encode(params or {}))
-        encoded_params = urllib.urlencode(params)
+        encoded_param_dict = dict(_api_encode(params or {}))
+        print params
+        print encoded_param_dict
+        # params = list()
+        encoded_params = urllib.urlencode(list(_api_encode(params or {})))
 
         if method == 'get' or method == 'delete':
             if params:
                 abs_url = _build_api_url(abs_url, encoded_params)
             post_data = None
-        elif method == 'post':
+        elif method in ('post', 'put', 'patch', 'delete'):
             if supplied_headers is not None and supplied_headers.get('Content-Type') == 'multipart/form-data':
                 generator = MultipartDataGenerator()
                 generator.add_params(params or {})
@@ -135,8 +138,6 @@ class ReplyifApi(object):
                 supplied_headers['Content-Type'] = 'multipart/form-data; boundary=%s' % (generator.boundary,)
             else:
                 post_data = encoded_params
-        elif method in ('patch', 'put'):
-            post_data = utils.json.dumps(params)
         else:
             raise exceptions.APIConnectionException(
                 'Unrecognized HTTP method %r.  This may indicate a bug in the '
@@ -166,8 +167,8 @@ class ReplyifApi(object):
 
         if method == 'post':
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
-        elif method in ('patch', 'put', 'delete'):
-            headers['Content-Type'] = 'application/json'
+        # elif method in ('patch', 'put', 'delete'):
+        #     headers['Content-Type'] = 'application/json'
 
         if api_version is not None:
             headers['Replyify-Version'] = api_version
