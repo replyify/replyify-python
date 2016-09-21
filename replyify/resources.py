@@ -423,15 +423,69 @@ class Template(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource
         return cls._modify(cls._build_instance_url(guid), **params)
 
 
+class Timeline(CreateableAPIResource, ListableAPIResource):
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+
+class TimelineItem(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+    @classmethod
+    def class_url(cls):
+        return '/timeline-item/v1'
+
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
+class TimelineJob(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource):
+    @classmethod
+    def class_url(cls):
+        return '/timeline-job/v1'
+
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
+class Signature(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
 def convert_to_replyify_object(resp, access_token):
     types = {
         'account': Account,
         'campaign': Campaign,
-        # 'campaign_item': CampaignItem,
-        # 'campaign_job': CampaignJob,
+        'timeline': Timeline,
+        'timelineitem': TimelineItem,
+        'timelinejob': TimelineJob,
         'contact': Contact,
         'template': Template,
-        # 'signature': Signature,
+        'signature': Signature,
         # 'link': Link,
         # 'link_click': LinkClick,
     }
