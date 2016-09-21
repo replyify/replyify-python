@@ -399,14 +399,38 @@ class Campaign(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource
         return cls._modify(cls._build_instance_url(guid), **params)
 
 
+class Contact(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
+class Template(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
 def convert_to_replyify_object(resp, access_token):
     types = {
         'account': Account,
         'campaign': Campaign,
         # 'campaign_item': CampaignItem,
         # 'campaign_job': CampaignJob,
-        # 'contact': Contact,
-        # 'template': Template,
+        'contact': Contact,
+        'template': Template,
         # 'signature': Signature,
         # 'link': Link,
         # 'link_click': LinkClick,
