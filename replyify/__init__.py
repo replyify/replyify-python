@@ -21,6 +21,15 @@ from replyify.utils import json, logger  # noqa
 from replyify.resources import (  # noqa
     Account,
     Campaign,
+    CampaignContact,
     Contact,
+    ContactField,
+    Note,
+    Reply,
+    Signature,
+    Tag,
     Template,
+    Timeline,
+    TimelineItem,
+    TimelineJob,
 )

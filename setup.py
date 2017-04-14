@@ -10,7 +10,12 @@ except ImportError:
 path, script = os.path.split(sys.argv[0])
 os.chdir(os.path.abspath(path))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'replyify'))
-from version import VERSION
+
+with open(os.path.join(os.path.dirname(__file__), 'VERSION'), 'r') as v:
+    VERSION = v.read()
+
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
+    README = readme.read()
 
 install_requires = []
 author_email = 'team@replyify.com'
@@ -26,16 +31,11 @@ else:
     install_requires.append('requests >= 0.8.8')
 
 
-def readme():
-    with open('README.rst') as f:
-        return f.read()
-
-
 setup(
     name='replyify',
     version=VERSION,
     description='Replyify REST API Client',
-    long_description=readme(),
+    long_description=README,
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

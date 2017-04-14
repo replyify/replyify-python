@@ -399,7 +399,75 @@ class Campaign(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource
         return cls._modify(cls._build_instance_url(guid), **params)
 
 
+class CampaignContact(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+    @classmethod
+    def class_url(cls):
+        return '/campaign-contact/v1'
+
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
 class Contact(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
+class ContactField(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+    @classmethod
+    def class_url(cls):
+        return '/contact-field/v1'
+
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
+class Note(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
+class Reply(UpdateableAPIResource, ListableAPIResource):
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+    @classmethod
+    def modify(cls, guid=None, **params):
+        return cls._modify(cls._build_instance_url(guid), **params)
+
+
+class Tag(CreateableAPIResource, UpdateableAPIResource, ListableAPIResource, DeletableAPIResource):
     @classmethod
     def retrieve(cls, guid=None, access_token=None, **params):
         instance = cls(guid, access_token, **params)
@@ -480,12 +548,17 @@ def convert_to_replyify_object(resp, access_token):
     types = {
         'account': Account,
         'campaign': Campaign,
+        'campaigncontact': CampaignContact,
+        'contact': Contact,
+        'contactfield': ContactField,
+        'note': Note,
+        'reply': Reply,
+        'signature': Signature,
+        'tag': Tag,
+        'template': Template,
         'timeline': Timeline,
         'timelineitem': TimelineItem,
         'timelinejob': TimelineJob,
-        'contact': Contact,
-        'template': Template,
-        'signature': Signature,
         # 'link': Link,
         # 'link_click': LinkClick,
     }
