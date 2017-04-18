@@ -46,6 +46,18 @@ if not (json and hasattr(json, 'loads')):
                 'or `easy_install simplejson`')
 
 
+def convert_to_boolean(s):
+    if isinstance(s, bool):
+        return s
+    if isinstance(s, basestring):
+        if s in ('True', '1', 'true', 'T', 't'):
+            return True
+    if isinstance(s, int):
+        if s > 0:
+            return True
+    return False
+
+
 def utf8(value):
     if isinstance(value, unicode) and sys.version_info < (3, 0):
         return value.encode('utf-8')
