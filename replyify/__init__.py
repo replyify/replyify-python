@@ -5,10 +5,8 @@
 
 # Configuration variables
 import os
-application_key = os.getenv('REPLYIFY_API_KEY')
-application_secret = os.getenv('REPLYIFY_API_SECRET')
-access_token = None
-refresh_token = None
+access_token = os.getenv('REPLYIFY_ACCESS_TOKEN', None)
+refresh_token = os.getenv('REPLYIFY_REFRESH_TOKEN', None)
 api_base = os.getenv('REPLYIFY_API_BASE', 'https://api.replyify.com')
 upload_api_base = os.getenv('REPLYIFY_API_UPLOAD_BASE', 'https://uploads.replyify.com')
 api_version = None

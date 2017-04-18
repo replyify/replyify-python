@@ -1,5 +1,4 @@
 import urllib
-import warnings
 import sys
 
 from replyify import api, exceptions, utils, upload_api_base
