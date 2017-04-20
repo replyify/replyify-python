@@ -4,6 +4,8 @@
 # Marco DiDomenico <marco@replyify.com>
 
 # Configuration variables
+__version__ = '0.0.2'
+
 import os
 from .utils import convert_to_boolean
 access_token = os.getenv('REPLYIFY_ACCESS_TOKEN', None)

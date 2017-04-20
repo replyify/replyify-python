@@ -229,7 +229,7 @@ class APIResource(ReplyifyObject):
     def instance_url(self):
         guid = self.get('guid')
         if not guid:
-            raise exceptions.InvalidRequestError(
+            raise exceptions.InvalidRequestException(
                 'Could not determine which URL to request: %s instance '
                 'has invalid GUID: %r' % (type(self).__name__, guid), 'guid')
         guid = utils.utf8(guid)
