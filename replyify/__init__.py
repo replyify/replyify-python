@@ -4,7 +4,7 @@
 # Marco DiDomenico <marco@replyify.com>
 
 # Configuration variables
-__version__ = '0.0.2'
+__version__ = '0.0.4'
 
 import os
 from .utils import convert_to_boolean
