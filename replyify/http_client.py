@@ -10,6 +10,8 @@ import email
 
 from replyify import exceptions, utils
 
+CACERT_PATH = 'data/cacert-2017-01-18.pem'
+
 
 # - Requests is the preferred HTTP library
 # - Google App Engine has urlfetch
@@ -92,7 +94,7 @@ class RequestsClient(HTTPClient):
 
         if self._verify_ssl_certs:
             kwargs['verify'] = os.path.join(
-                os.path.dirname(__file__), 'data/cacert-2017-01-18.pem')
+                os.path.dirname(__file__), CACERT_PATH)
         else:
             kwargs['verify'] = False
 
@@ -226,7 +228,7 @@ class PycurlClient(HTTPClient):
                     for k, v in headers.iteritems()])
         if self._verify_ssl_certs:
             curl.setopt(pycurl.CAINFO, os.path.join(
-                os.path.dirname(__file__), 'data/ca-certificates.crt'))
+                os.path.dirname(__file__), CACERT_PATH))
         else:
             curl.setopt(pycurl.SSL_VERIFYHOST, False)
 
