@@ -4,7 +4,7 @@
 # Marco DiDomenico <marco@replyify.com>
 
 # Configuration variables
-__version__ = '0.0.4'
+__version__ = '0.0.6'
 
 import os
 from .utils import convert_to_boolean
@@ -32,4 +32,5 @@ from replyify.resources import (  # noqa
     Timeline,
     TimelineItem,
     TimelineJob,
+    Upload,
 )

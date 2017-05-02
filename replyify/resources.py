@@ -313,15 +313,13 @@ class ListableAPIResource(APIResource):
         requestor = api.ReplyifApi(access_token, api_base=cls.api_base())
         url = cls.class_url()
         response, access_token = requestor.request('get', url, params)
-        replyify_object = convert_to_replyify_object(response, access_token)
-        replyify_object._retrieve_params = params
-        return replyify_object
+        return convert_to_replyify_object(response, access_token)
 
 
 class CreateableAPIResource(APIResource):
 
     @classmethod
-    def create(cls, access_token=None,  idempotency_key=None, **params):
+    def create(cls, access_token=None, idempotency_key=None, **params):
         requestor = api.ReplyifApi(access_token)
         url = cls.class_url()
         headers = populate_headers(idempotency_key)
@@ -332,7 +330,7 @@ class CreateableAPIResource(APIResource):
 class UpdateableAPIResource(APIResource):
 
     @classmethod
-    def _modify(cls, url, access_token=None,  idempotency_key=None, **params):
+    def _modify(cls, url, access_token=None, idempotency_key=None, **params):
         requestor = api.ReplyifApi(access_token)
         headers = populate_headers(idempotency_key)
         response, access_token = requestor.request('patch', url, params, headers)
@@ -543,6 +541,15 @@ class Signature(CreateableAPIResource, UpdateableAPIResource, ListableAPIResourc
         return cls._modify(cls._build_instance_url(guid), **params)
 
 
+class Upload(CreateableAPIResource, ListableAPIResource):
+
+    @classmethod
+    def retrieve(cls, guid=None, access_token=None, **params):
+        instance = cls(guid, access_token, **params)
+        instance.refresh()
+        return instance
+
+
 def convert_to_replyify_object(resp, access_token):
     types = {
         'account': Account,
@@ -558,6 +565,7 @@ def convert_to_replyify_object(resp, access_token):
         'timeline': Timeline,
         'timelineitem': TimelineItem,
         'timelinejob': TimelineJob,
+        'upload': Upload,
         # 'link': Link,
         # 'link_click': LinkClick,
     }
