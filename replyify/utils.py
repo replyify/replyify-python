@@ -10,9 +10,9 @@ __all__ = ['StringIO', 'parse_qsl', 'json', 'utf8']
 
 try:
     # When cStringIO is available
-    import io as StringIO
+    import cStringIO as StringIO
 except ImportError:
-    import io
+    import io as StringIO
 
 try:
     from urllib.parse import parse_qsl
