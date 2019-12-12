@@ -2,8 +2,7 @@ import calendar
 import datetime
 import platform
 import time
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 # import warnings
 
 import replyify
@@ -22,13 +21,13 @@ def _encode_datetime(dttime):
 
 def _encode_nested_dict(key, data, fmt='%s[%s]'):
     d = {}
-    for subkey, subvalue in data.iteritems():
+    for subkey, subvalue in data.items():
         d[fmt % (key, subkey)] = subvalue
     return d
 
 
 def _api_encode(data):
-    for key, value in data.iteritems():
+    for key, value in data.items():
         key = utils.utf8(key)
         if value is None:
             continue
@@ -53,12 +52,12 @@ def _api_encode(data):
 
 
 def _build_api_url(url, query):
-    scheme, netloc, path, base_query, fragment = urlparse.urlsplit(url)
+    scheme, netloc, path, base_query, fragment = urllib.parse.urlsplit(url)
 
     if base_query:
         query = '%s&%s' % (base_query, query)
 
-    return urlparse.urlunsplit((scheme, netloc, path, query, fragment))
+    return urllib.parse.urlunsplit((scheme, netloc, path, query, fragment))
 
 
 class ReplyifApi(object):
@@ -120,7 +119,7 @@ class ReplyifApi(object):
 
         method = method.lower()
         abs_url = '%s%s' % (self.api_base, url)
-        encoded_params = urllib.urlencode(list(_api_encode(params or {})))
+        encoded_params = urllib.parse.urlencode(list(_api_encode(params or {})))
 
         if method == 'get' or method == 'delete':
             if params:
@@ -170,7 +169,7 @@ class ReplyifApi(object):
             headers['Replyify-Version'] = api_version
 
         if supplied_headers is not None:
-            for key, value in supplied_headers.items():
+            for key, value in list(supplied_headers.items()):
                 headers[key] = value
 
         rbody, rcode, rheaders = self._client.request(method, abs_url, headers, post_data)

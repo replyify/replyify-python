@@ -1,4 +1,4 @@
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import sys
 
 from replyify import api, exceptions, utils, upload_api_base
@@ -104,7 +104,7 @@ class ReplyifyObject(dict):
                     'the result returned by Replyify API, probably as a '
                     'result of a save().  The attributes currently '
                     'available on this object are: %s' %
-                    (k, k, ', '.join(self.keys())))
+                    (k, k, ', '.join(list(self.keys()))))
             else:
                 raise err
 
@@ -137,7 +137,7 @@ class ReplyifyObject(dict):
 
         self._transient_values = self._transient_values - set(values)
 
-        for k, v in values.iteritems():
+        for k, v in values.items():
             super(ReplyifyObject, self).__setitem__(k, convert_to_replyify_object(v, access_token))
 
         self._previous = values
@@ -157,10 +157,10 @@ class ReplyifyObject(dict):
     def __repr__(self):
         ident_parts = [type(self).__name__]
 
-        if isinstance(self.get('object'), basestring):
+        if isinstance(self.get('object'), str):
             ident_parts.append(self.get('object'))
 
-        if isinstance(self.get('id'), basestring):
+        if isinstance(self.get('id'), str):
             ident_parts.append('id=%s' % (self.get('id'),))
 
         unicode_repr = '<%s at %s> JSON: %s' % (
@@ -186,7 +186,7 @@ class ReplyifyObject(dict):
         unsaved_keys = self._unsaved_values or set()
         previous = previous or self._previous or {}
 
-        for k, v in self.items():
+        for k, v in list(self.items()):
             if k == 'guid' or (isinstance(k, str) and k.startswith('_')):
                 continue
             elif isinstance(v, APIResource):
@@ -219,7 +219,7 @@ class APIResource(ReplyifyObject):
             raise NotImplementedError(
                 'APIResource is an abstract class.  You should perform '
                 'actions on its subclasses (e.g. Charge, Customer)')
-        return str(urllib.quote_plus(cls.__name__.lower()))
+        return str(urllib.parse.quote_plus(cls.__name__.lower()))
 
     @classmethod
     def class_url(cls):
@@ -234,7 +234,7 @@ class APIResource(ReplyifyObject):
                 'has invalid GUID: %r' % (type(self).__name__, guid), 'guid')
         guid = utils.utf8(guid)
         base = self.class_url()
-        extn = urllib.quote_plus(guid)
+        extn = urllib.parse.quote_plus(guid)
         return '%s/%s' % (base, extn)
 
     @classmethod
@@ -243,7 +243,7 @@ class APIResource(ReplyifyObject):
         if not guid:
             return base
         guid = utils.utf8(guid)
-        extn = urllib.quote_plus(guid)
+        extn = urllib.parse.quote_plus(guid)
         return '%s/%s' % (base, extn)
 
 
@@ -275,7 +275,7 @@ class ListObject(ReplyifyObject):
     def retrieve(self, guid, **params):
         base = self.get('url')
         guid = utils.utf8(guid)
-        extn = urllib.quote_plus(guid)
+        extn = urllib.parse.quote_plus(guid)
         url = '%s/%s' % (base, extn)
 
         return self.request('get', url, params)
@@ -338,7 +338,7 @@ class UpdateableAPIResource(APIResource):
 
     @classmethod
     def modify(cls, guid, **params):
-        url = '%s/%s' % (cls.class_url(), urllib.quote_plus(utils.utf8(guid)))
+        url = '%s/%s' % (cls.class_url(), urllib.parse.quote_plus(utils.utf8(guid)))
         return cls._modify(url, **params)
 
     def save(self, idempotency_key=None):
@@ -377,7 +377,7 @@ class Account(CreateableAPIResource, UpdateableAPIResource):
             return '/account/v1'
         guid = utils.utf8(guid)
         base = cls.class_url()
-        extn = urllib.quote_plus(guid)
+        extn = urllib.parse.quote_plus(guid)
         return '%s/%s' % (base, extn)
 
     def instance_url(self):
@@ -575,7 +575,7 @@ def convert_to_replyify_object(resp, access_token):
     elif isinstance(resp, dict) and not isinstance(resp, ReplyifyObject):
         resp = resp.copy()
         klass_name = resp.get('object')
-        if isinstance(klass_name, basestring):
+        if isinstance(klass_name, str):
             klass = types.get(klass_name, ReplyifyObject)
         else:
             klass = ReplyifyObject

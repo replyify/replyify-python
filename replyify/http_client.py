@@ -18,7 +18,7 @@ CACERT_PATH = 'data/cacert-2017-01-18.pem'
 # - Use Pycurl if it's there (at least it verifies SSL certs)
 # - Fall back to urllib2 with a warning if needed
 try:
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
 except ImportError:
     pass
 
@@ -201,7 +201,7 @@ class PycurlClient(HTTPClient):
             return {}
         raw_headers = data.split('\r\n', 1)[1]
         headers = email.message_from_string(raw_headers)
-        return dict((k.lower(), v) for k, v in dict(headers).iteritems())
+        return dict((k.lower(), v) for k, v in dict(headers).items())
 
     def request(self, method, url, headers, post_data=None):
         s = utils.StringIO.StringIO()
@@ -225,7 +225,7 @@ class PycurlClient(HTTPClient):
         curl.setopt(pycurl.CONNECTTIMEOUT, 30)
         curl.setopt(pycurl.TIMEOUT, 80)
         curl.setopt(pycurl.HTTPHEADER, ['%s: %s' % (k, v)
-                    for k, v in headers.iteritems()])
+                    for k, v in headers.items()])
         if self._verify_ssl_certs:
             curl.setopt(pycurl.CAINFO, os.path.join(
                 os.path.dirname(__file__), CACERT_PATH))
@@ -271,26 +271,26 @@ class Urllib2Client(HTTPClient):
         name = 'urllib2'
 
     def request(self, method, url, headers, post_data=None):
-        if sys.version_info >= (3, 0) and isinstance(post_data, basestring):
+        if sys.version_info >= (3, 0) and isinstance(post_data, str):
             post_data = post_data.encode('utf-8')
 
-        req = urllib2.Request(url, post_data, headers)
+        req = urllib.request.Request(url, post_data, headers)
 
         if method not in ('get', 'post'):
             req.get_method = lambda: method.upper()
 
         try:
-            response = urllib2.urlopen(req)
+            response = urllib.request.urlopen(req)
             rbody = response.read()
             rcode = response.code
             headers = dict(response.info())
-        except urllib2.HTTPError as e:
+        except urllib.error.HTTPError as e:
             rcode = e.code
             rbody = e.read()
             headers = dict(e.info())
-        except (urllib2.URLError, ValueError) as e:
+        except (urllib.error.URLError, ValueError) as e:
             self._handle_request_error(e)
-        lh = dict((k.lower(), v) for k, v in dict(headers).iteritems())
+        lh = dict((k.lower(), v) for k, v in dict(headers).items())
         return rbody, rcode, lh
 
     def _handle_request_error(self, e):

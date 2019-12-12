@@ -24,7 +24,7 @@ class ReplyifyException(Exception):
     def __unicode__(self):
         if self.request_id is not None:
             msg = self._message or "<empty message>"
-            return u"Request {0}: {1}".format(self.request_id, msg)
+            return "Request {0}: {1}".format(self.request_id, msg)
         else:
             return self._message
 
@@ -33,7 +33,7 @@ class ReplyifyException(Exception):
             return self.__unicode__()
     else:
         def __str__(self):
-            return unicode(self).encode('utf-8')
+            return str(self).encode('utf-8')
 
 
 class APIException(ReplyifyException):

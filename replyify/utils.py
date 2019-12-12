@@ -10,12 +10,12 @@ __all__ = ['StringIO', 'parse_qsl', 'json', 'utf8']
 
 try:
     # When cStringIO is available
-    import cStringIO as StringIO
+    import io as StringIO
 except ImportError:
-    import StringIO
+    import io
 
 try:
-    from urlparse import parse_qsl
+    from urllib.parse import parse_qsl
 except ImportError:
     # Python < 2.6
     from cgi import parse_qsl
@@ -49,7 +49,7 @@ if not (json and hasattr(json, 'loads')):
 def convert_to_boolean(s):
     if isinstance(s, bool):
         return s
-    if isinstance(s, basestring):
+    if isinstance(s, str):
         if s in ('True', '1', 'true', 'T', 't'):
             return True
     if isinstance(s, int):
@@ -59,7 +59,7 @@ def convert_to_boolean(s):
 
 
 def utf8(value):
-    if isinstance(value, unicode) and sys.version_info < (3, 0):
+    if isinstance(value, str) and sys.version_info < (3, 0):
         return value.encode('utf-8')
     else:
         return value
@@ -78,7 +78,7 @@ class MultipartDataGenerator(object):
         self.chunk_size = chunk_size
 
     def add_params(self, params):
-        for key, value in params.iteritems():
+        for key, value in params.items():
             if value is None:
                 continue
 
@@ -117,7 +117,7 @@ class MultipartDataGenerator(object):
     def _write(self, value):
         if sys.version_info < (3,):
             binary_type = str
-            text_type = unicode
+            text_type = str
         else:
             binary_type = bytes
             text_type = str
