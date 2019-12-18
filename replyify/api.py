@@ -2,7 +2,12 @@ import calendar
 import datetime
 import platform
 import time
-import urllib.request, urllib.parse, urllib.error
+
+try:
+    from urllib import parse as url_parse
+except Exception as e:
+    import urlparse as url_parse
+
 # import warnings
 
 import replyify
@@ -52,12 +57,12 @@ def _api_encode(data):
 
 
 def _build_api_url(url, query):
-    scheme, netloc, path, base_query, fragment = urllib.parse.urlsplit(url)
+    scheme, netloc, path, base_query, fragment = url_parse.urlsplit(url)
 
     if base_query:
         query = '%s&%s' % (base_query, query)
 
-    return urllib.parse.urlunsplit((scheme, netloc, path, query, fragment))
+    return url_parse.urlunsplit((scheme, netloc, path, query, fragment))
 
 
 class ReplyifApi(object):
@@ -119,7 +124,7 @@ class ReplyifApi(object):
 
         method = method.lower()
         abs_url = '%s%s' % (self.api_base, url)
-        encoded_params = urllib.parse.urlencode(list(_api_encode(params or {})))
+        encoded_params = url_parse.urlencode(list(_api_encode(params or {})))
 
         if method == 'get' or method == 'delete':
             if params:
