@@ -248,7 +248,7 @@ class PycurlClient(HTTPClient):
             msg = ("Could not connect to Replyify.  Please check your "
                    "internet connection and try again.  If this problem "
                    "persists, you should check Replyify's service status at "
-                   "https://twitter.com/replyifystatus, or let us know at "
+                   "https://twitter.com/replyify, or let us know at "
                    "support@replyify.com.")
         elif (e[0] in [pycurl.E_SSL_CACERT,
                        pycurl.E_SSL_PEER_CERTIFICATE]):

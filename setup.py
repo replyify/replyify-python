@@ -36,6 +36,7 @@ setup(
     version=VERSION,
     description='Replyify REST API Client',
     long_description=README,
+    long_description_content_type='text/x-rst',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

@@ -8,12 +8,12 @@ Installation
 ------------
 
 You can install this package by using the pip tool and installing:
-::
-    $ pip install replyify
+
+**$ pip install replyify**
     
 Or:
-::
-    $ easy_install replyify
+
+**$ easy_install replyify**
     
 
 Register Your Application with Replyify
@@ -27,19 +27,19 @@ Register Your Application with Replyify
 Credentials:
 API calls require an access token obtained using OAuth2.  Once you obtain an access token for a user you can set the `REPLYIFY_ACCESS_TOKEN` with environment variables, manually after importing `replyify`, or with each request:
 ::
-	$ export REPLYIFY_ACCESS_TOKEN='{ your access token }'
-	...
+$ export REPLYIFY_ACCESS_TOKEN='{ your access token }'
+...
 
 You can also set them manually:
 ::
-	import replyify
-	replyify.access_token = '{ add key here }'
-	...
+import replyify
+replyify.access_token = '{ add key here }'
+...
 
 or with each request:
 ::
-	import replyify
-	campaign = replyify.Campaign.retrieve('asdf-...-1234', access_token='{ access token here }')
+import replyify
+campaign = replyify.Campaign.retrieve('asdf-...-1234', access_token='{ access token here }')
 
 	
 
