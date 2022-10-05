@@ -152,7 +152,7 @@ class ReplyifyObject(dict):
     def request(self, method, url, params=None, headers=None):
         if params is None:
             params = self._retrieve_params
-        requestor = api.ReplyifApi(self.access_token, api_base=self.api_base())
+        requestor = api.ReplyifyApi(self.access_token, api_base=self.api_base())
         response, access_token = requestor.request(method, url, params, headers)
 
         return convert_to_replyify_object(response, access_token)
@@ -313,7 +313,7 @@ class ListableAPIResource(APIResource):
 
     @classmethod
     def list(cls, access_token=None, idempotency_key=None, **params):
-        requestor = api.ReplyifApi(access_token, api_base=cls.api_base())
+        requestor = api.ReplyifyApi(access_token, api_base=cls.api_base())
         url = cls.class_url()
         response, access_token = requestor.request('get', url, params)
         return convert_to_replyify_object(response, access_token)
@@ -323,7 +323,7 @@ class CreateableAPIResource(APIResource):
 
     @classmethod
     def create(cls, access_token=None, idempotency_key=None, **params):
-        requestor = api.ReplyifApi(access_token)
+        requestor = api.ReplyifyApi(access_token)
         url = cls.class_url()
         headers = populate_headers(idempotency_key)
         response, access_token = requestor.request('post', url, params, headers)
@@ -334,7 +334,7 @@ class UpdateableAPIResource(APIResource):
 
     @classmethod
     def _modify(cls, url, access_token=None, idempotency_key=None, **params):
-        requestor = api.ReplyifApi(access_token)
+        requestor = api.ReplyifyApi(access_token)
         headers = populate_headers(idempotency_key)
         response, access_token = requestor.request('patch', url, params, headers)
         return convert_to_replyify_object(response, access_token)

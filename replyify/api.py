@@ -65,7 +65,7 @@ def _build_api_url(url, query):
     return url_parse.urlunsplit((scheme, netloc, path, query, fragment))
 
 
-class ReplyifApi(object):
+class ReplyifyApi(object):
 
     def __init__(self, access_token=None, client=None, api_base=None, account=None):
         self.api_base = api_base or replyify.api_base
